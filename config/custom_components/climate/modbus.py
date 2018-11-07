@@ -89,18 +89,25 @@ class ModbusThermostat(ClimateDevice):
         self._structure = '>i'
         self._unit_of_measurement = unit_of_measurement
         self._scale = scale
-
+       
         data_types = {DATA_TYPE_INT: {1: 'h', 2: 'i', 4: 'q'},
                       DATA_TYPE_UINT: {1: 'H', 2: 'I', 4: 'Q'},
                       DATA_TYPE_FLOAT: {1: 'e', 2: 'f', 4: 'd'}}
 
         self._structure = '>{}'.format(data_types[self._data_type]
                                        [self._count])
+        self._state = None
 
     @property
     def supported_features(self):
         """Return the list of supported features."""
         return SUPPORT_FLAGS
+    
+    @property
+    def state(self):
+        """Return the current state."""
+        self._state = 'Target:'
+        return self._state
 
     def update(self):
         """Fetch new state data for the sensor."""
